@@ -3,8 +3,12 @@ services:
     name: football-match-tracker
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: |
+      python -c "from app import db; db.create_all()" && 
+      gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.8.0
+      - key: FLASK_APP
+        value: app.py
     plan: free
